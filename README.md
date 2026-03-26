@@ -1,39 +1,56 @@
-"# Full-Stack-AI-Chatbot-App-React-Node.js-Express-OpenAI-API" 
-
 # 🤖 Full-Stack AI Chatbot Web App
 
-A modern Full-Stack AI Chatbot application built using **React.js** for the frontend and **Node.js + Express** for the backend. This project integrates the **OpenAI API** to provide intelligent, real-time conversational responses in a clean and responsive user interface.
-
-The app demonstrates how to connect a React client with a Node.js server and securely interact with an AI API to build a production-ready chatbot experience.
+A modern Full-Stack AI Chatbot application built using a simple frontend + Node.js + Express backend. This project integrates the OpenAI API to provide intelligent conversational responses.
 
 ---
 
 ## 🚀 Features
 
 - Real-time AI chat responses
-- Clean and responsive UI with React
+- Clean responsive UI
 - REST API built with Node.js and Express
-- Secure API key handling on the server side
+- Secure API key handling on server-side
 - Conversation history maintained during session
-- Error handling and loading states
-- Modular and scalable folder structure
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠 Tech Stack
 
-**Frontend**
-- React.js
-- CSS / Tailwind (if used)
-- Axios / Fetch API
-
-**Backend**
 - Node.js
-- Express.js
+- Express
 - OpenAI API
+- Vanilla HTML/CSS/JavaScript frontend
 
 ---
 
-## 📂 Project Structure
+## 📦 Files
 
-"# AI-chat-bot" 
+- `server.js`: Express web server and OpenAI API handler
+- `client/index.html`: simple chat UI
+- `client/script.js`: frontend fetch + render logic
+- `.env.example`: configure your OpenAI API key
+- `package.json`: dependencies + scripts
+
+---
+
+## 🚀 Setup
+
+1. Copy `.env.example` to `.env`.
+2. Set `OPENAI_API_KEY`.
+3. Run `npm install`.
+4. Run `npm start`.
+5. Open `http://localhost:3000`.
+
+---
+
+## ⚙️ Run development
+
+- `npm run dev` (with nodemon auto-restart)
+
+---
+
+## 💡 Notes
+
+- Replace the model in `server.js` with `gpt-4o` / `gpt-4.1` if your account has access.
+- Keep `.env` secret and out of source control.
+ 
