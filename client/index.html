@@ -5,28 +5,141 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Chatbot</title>
     <style>
-      body { font-family: Arial, sans-serif; margin: 0; background: #f0f2f5; color: #1f2937; }
-      .app { max-width: 800px; margin: 2rem auto; padding: 1rem; background: #fff; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,.1); }
-      .chat { margin: 1rem 0; max-height: 65vh; overflow-y: auto; }
-      .message { margin: 0.5rem 0; padding: 0.75rem 1rem; border-radius: 12px; }
-      .message.user { background: #e0f2fe; text-align: right; }
-      .message.bot { background: #e7f5e6; text-align: left; }
-      .input-area { display: flex; gap: 0.75rem; }
-      input[type='text'] { flex: 1; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; }
-      button { padding: 0.75rem 1rem; border: 0; border-radius: 8px; background: #2563eb; color: white; cursor: pointer; }
-      button:disabled { background: #94a3b8; cursor: not-allowed; }
+      :root {
+        --bg: #0a0f1a;
+        --card: rgba(7, 16, 41, 0.8);
+        --text: #e2e8f0;
+        --muted: #94a3b8;
+        --accent: #22d3ee;
+        --accent-dark: #0ea5e9;
+        --box: rgba(15, 23, 42, 0.65);
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: radial-gradient(circle at top, #1c2541 0%, #0a0f1a 60%);
+        color: var(--text);
+        font-family: 'Inter', system-ui, -apple-system, Segoe UI, sans-serif;
+      }
+
+      .app {
+        width: min(96vw, 880px);
+        margin: 1.4rem auto;
+        padding: 1.2rem;
+        border-radius: 16px;
+        background: var(--card);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      }
+
+      h1 {
+        margin: 0 0 0.75rem 0;
+        font-size: 1.9rem;
+        letter-spacing: 0.03em;
+      }
+
+      .subtext { color: var(--muted); margin-bottom: 0.85rem; }
+
+      .chat {
+        height: 62vh;
+        max-height: 620px;
+        overflow-y: auto;
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        border-radius: 14px;
+        padding: 0.7rem;
+        background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.65), rgba(10, 15, 26, 0.95));
+        scroll-behavior: smooth;
+      }
+
+      .message {
+        margin: 0.5rem 0;
+        max-width: 78%;
+        padding: 0.8rem 0.95rem;
+        border-radius: 14px;
+        line-height: 1.45;
+        white-space: pre-wrap;
+        word-break: break-word;
+        animation: fadeIn 200ms ease;
+      }
+
+      .message.bot {
+        align-self: flex-start;
+        background: linear-gradient(135deg, #1e293b, #111827);
+        border-left: 3px solid var(--accent);
+        color: #dbeafe;
+      }
+
+      .message.user {
+        align-self: flex-end;
+        background: linear-gradient(135deg, #0f766e, #0f172a);
+        border-right: 3px solid #facc15;
+        color: #f8fafc;
+      }
+
+      .chat .empty {
+        color: var(--muted);
+        text-align: center;
+        padding-top: 3rem;
+      }
+
+      .input-area {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 0.7rem;
+        margin-top: 0.9rem;
+      }
+
+      .input-area input {
+        width: 100%;
+        border-radius: 12px;
+        padding: 0.8rem 0.9rem;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        background: rgba(15, 23, 42, 0.85);
+        color: var(--text);
+        outline: none;
+      }
+
+      .input-area input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.2);
+      }
+
+      .input-area button {
+        border: 0;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+        color: #0f172a;
+        font-weight: 700;
+        cursor: pointer;
+        min-width: 110px;
+        transition: transform .14s ease, opacity .14s ease;
+      }
+
+      .input-area button:disabled { opacity: 0.6; cursor: not-allowed; }
+      .input-area button:hover:not(:disabled) { transform: translateY(-1px); }
+
+      .status { margin-top: 0.5rem; font-size: 0.85rem; color: #94a3b8; }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(4px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
     </style>
   </head>
   <body>
     <div class="app">
       <h1>AI Chatbot</h1>
-      <div class="chat" id="chat"></div>
+      <p class="subtext">Ask questions, get code tips, planning help, and more from your AI assistant.</p>
+      <div class="chat" id="chat"><div class="empty">Type a message below to start the conversation.</div></div>
       <div class="input-area">
-        <input id="message" type="text" placeholder="Ask me anything..." autocomplete="off" />
+        <input id="message" type="text" placeholder="Type your message..." autocomplete="off" />
         <button id="sendBtn">Send</button>
       </div>
+      <div class="status" id="status">Ready</div>
     </div>
-
     <script src="script.js"></script>
   </body>
 </html>
