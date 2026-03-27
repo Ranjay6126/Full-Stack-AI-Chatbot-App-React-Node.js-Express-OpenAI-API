@@ -47,7 +47,15 @@ The server binds to 0.0.0.0, so it's accessible from other devices on your netwo
 
 The API endpoint `/api/chat` is accessible from anywhere due to CORS configuration. You can make POST requests to `http://<your-server-ip>:3000/api/chat` with JSON body `{"message": "your message"}`.
 
-For public internet access, deploy to a cloud platform like Heroku, Vercel, or Railway.
+The server binds to `0.0.0.0`, making it accessible from other devices on your network.
+
+For public internet access, deploy to a cloud platform like:
+- **Heroku**: `git init`, `heroku create`, `git push heroku main`
+- **Railway**: Connect GitHub repo and deploy
+- **Vercel**: For static frontend, but for full app use Node.js deployment
+- **Render**: Free tier for Node.js apps
+
+Set `OPENAI_API_KEY` in your deployment environment variables.
 
 ---
 
