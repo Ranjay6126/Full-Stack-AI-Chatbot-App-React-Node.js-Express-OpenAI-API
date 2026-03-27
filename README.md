@@ -39,7 +39,7 @@ A modern Full-Stack AI Chatbot application built using a simple frontend + Node.
 2. Set `OPENAI_API_KEY` with your OpenAI API key.
 3. Run `npm install`.
 4. Run `npm start`.
-5. Open `http://localhost:3000` or your network IP address.
+5. Open `http://localhost:3001` or your network IP address.
 
 The server binds to 0.0.0.0, so it's accessible from other devices on your network at `http://<your-ip>:3000`.
 
