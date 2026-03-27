@@ -36,10 +36,18 @@ A modern Full-Stack AI Chatbot application built using a simple frontend + Node.
 ## 🚀 Setup
 
 1. Copy `.env.example` to `.env`.
-2. Set `OPENAI_API_KEY`.
+2. Set `OPENAI_API_KEY` with your OpenAI API key.
 3. Run `npm install`.
 4. Run `npm start`.
-5. Open `http://localhost:3000`.
+5. Open `http://localhost:3000` or your network IP address.
+
+The server binds to 0.0.0.0, so it's accessible from other devices on your network at `http://<your-ip>:3000`.
+
+## 🌐 API Access
+
+The API endpoint `/api/chat` is accessible from anywhere due to CORS configuration. You can make POST requests to `http://<your-server-ip>:3000/api/chat` with JSON body `{"message": "your message"}`.
+
+For public internet access, deploy to a cloud platform like Heroku, Vercel, or Railway.
 
 ---
 
