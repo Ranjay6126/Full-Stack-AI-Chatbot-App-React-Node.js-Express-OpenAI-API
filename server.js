@@ -20,25 +20,43 @@ app.use(express.static(path.join(__dirname, 'client')));
 
 app.post('/api/chat', async (req, res) => {
   try {
-    const { message } = req.body;
+    const { message, history } = req.body;
+
     if (!message || message.trim().length === 0) {
       return res.status(400).json({ error: 'Message is required.' });
     }
 
+    const conversation = [
+      { role: 'system', content: 'You are a helpful AI chatbot.' },
+      ...(Array.isArray(history) ? history : []),
+      { role: 'user', content: message }
+    ];
+
     const completion = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
-      messages: [
-        { role: 'system', content: 'You are a helpful AI chatbot.' },
-        { role: 'user', content: message }
-      ],
-      max_tokens: 250,
+      messages: conversation,
+      max_tokens: 300,
       temperature: 0.7
     });
 
     const botReply = completion.choices[0]?.message?.content?.trim();
-    return res.json({ reply: botReply || 'Sorry, I could not generate a response.' });
+    if (!botReply) {
+      return res.status(500).json({ error: 'OpenAI returned an empty response.' });
+    }
+
+    const updatedHistory = [...(Array.isArray(history) ? history : []),
+      { role: 'user', content: message },
+      { role: 'assistant', content: botReply }
+    ];
+
+    return res.json({ reply: botReply, history: updatedHistory });
   } catch (err) {
     console.error('OpenAI request failed:', err);
+
+    if (err instanceof Error && err.message) {
+      return res.status(500).json({ error: `AI request failed: ${err.message}` });
+    }
+
     return res.status(500).json({ error: 'AI request failed.' });
   }
 });
