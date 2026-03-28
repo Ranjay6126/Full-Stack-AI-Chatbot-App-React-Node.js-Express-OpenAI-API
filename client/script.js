@@ -3,6 +3,8 @@ const msgEl = document.getElementById('message');
 const sendBtn = document.getElementById('sendBtn');
 const statusEl = document.getElementById('status');
 
+let chatHistory = [];
+
 function setStatus(text) {
   statusEl.textContent = text;
 }
@@ -27,6 +29,7 @@ async function sendMessage() {
   }
 
   addMessage(message, 'user');
+  chatHistory.push({ role: 'user', content: message });
   msgEl.value = '';
   sendBtn.disabled = true;
   setStatus('Thinking ...');
@@ -35,18 +38,31 @@ async function sendMessage() {
     const response = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message })
+      body: JSON.stringify({ message, history: chatHistory })
     });
 
     if (!response.ok) {
       const errorText = await response.text();
       addMessage(`Server error: ${errorText || 'Unknown error'}`, 'bot');
       setStatus('Error occurred. Try again.');
-    } else {
-      const data = await response.json();
-      addMessage(data.reply || 'No response returned.', 'bot');
-      setStatus('Ready');
+      return;
     }
+
+    const data = await response.json();
+    if (data.error) {
+      addMessage(`Error: ${data.error}`, 'bot');
+      setStatus('AI error');
+      return;
+    }
+
+    addMessage(data.reply || 'No response returned.', 'bot');
+    if (Array.isArray(data.history)) {
+      chatHistory = data.history;
+    } else {
+      chatHistory.push({ role: 'assistant', content: data.reply || '...' });
+    }
+
+    setStatus('Ready');
   } catch (err) {
     addMessage('Network error, please check your connection.', 'bot');
     console.error(err);
