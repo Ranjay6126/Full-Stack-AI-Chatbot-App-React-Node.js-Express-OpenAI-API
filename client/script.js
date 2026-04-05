@@ -1,6 +1,7 @@
 const chatEl = document.getElementById('chat');
 const msgEl = document.getElementById('message');
 const sendBtn = document.getElementById('sendBtn');
+const clearBtn = document.getElementById('clearBtn');
 const statusEl = document.getElementById('status');
 
 let chatHistory = [];
@@ -16,7 +17,15 @@ function addMessage(text, role) {
 
   const msgDiv = document.createElement('div');
   msgDiv.className = `message ${role}`;
-  msgDiv.textContent = text;
+  
+  if (role === 'bot') {
+    // Use marked for bot responses (Markdown support)
+    msgDiv.innerHTML = marked.parse(text);
+  } else {
+    // Use textContent for user messages for safety
+    msgDiv.textContent = text;
+  }
+  
   chatEl.appendChild(msgDiv);
   chatEl.scrollTop = chatEl.scrollHeight;
 }
@@ -38,13 +47,14 @@ async function sendMessage() {
     const response = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message, history: chatHistory })
+      body: JSON.stringify({ message, history: chatHistory.slice(0, -1) }) // history without current message
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      addMessage(`Server error: ${errorText || 'Unknown error'}`, 'bot');
-      setStatus('Error occurred. Try again.');
+      const data = await response.json().catch(() => ({}));
+      const errorMsg = data.error || `Server error: ${response.status}`;
+      addMessage(`Error: ${errorMsg}`, 'bot');
+      setStatus('Error occurred.');
       return;
     }
 
@@ -73,7 +83,15 @@ async function sendMessage() {
   }
 }
 
+function clearChat() {
+  chatEl.innerHTML = '<div class="empty">Type a message below to start the conversation.</div>';
+  chatHistory = [];
+  setStatus('Chat cleared');
+  setTimeout(() => setStatus('Ready'), 2000);
+}
+
 sendBtn.addEventListener('click', sendMessage);
+clearBtn.addEventListener('click', clearChat);
 msgEl.addEventListener('keydown', (event) => {
   if (event.key === 'Enter' && !event.shiftKey) {
     event.preventDefault();

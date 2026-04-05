@@ -10,15 +10,17 @@ app.use(cors());
 
 const openaiKey = process.env.OPENAI_API_KEY;
 if (!openaiKey) {
-  console.error('Missing OPENAI_API_KEY in environment variables.');
-  process.exit(1);
+  console.warn('Warning: Missing OPENAI_API_KEY in environment variables. API calls will fail.');
 }
 
-const openai = new OpenAI({ apiKey: openaiKey });
+const openai = openaiKey ? new OpenAI({ apiKey: openaiKey }) : null;
 
 app.use(express.static(path.join(__dirname, 'client')));
 
 app.post('/api/chat', async (req, res) => {
+  if (!openai) {
+    return res.status(500).json({ error: 'OpenAI API key is missing. Please set it in the .env file.' });
+  }
   try {
     const { message, history } = req.body;
 

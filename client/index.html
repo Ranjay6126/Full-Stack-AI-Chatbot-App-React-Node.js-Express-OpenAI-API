@@ -87,7 +87,7 @@
 
       .input-area {
         display: grid;
-        grid-template-columns: 1fr auto;
+        grid-template-columns: 1fr auto auto;
         gap: 0.7rem;
         margin-top: 0.9rem;
       }
@@ -114,8 +114,21 @@
         color: #0f172a;
         font-weight: 700;
         cursor: pointer;
-        min-width: 110px;
+        padding: 0 1.2rem;
+        min-width: 90px;
         transition: transform .14s ease, opacity .14s ease;
+      }
+
+      #clearBtn {
+        background: rgba(148, 163, 184, 0.1);
+        color: var(--muted);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        min-width: 80px;
+      }
+
+      #clearBtn:hover {
+        background: rgba(148, 163, 184, 0.2);
+        color: var(--text);
       }
 
       .input-area button:disabled { opacity: 0.6; cursor: not-allowed; }
@@ -123,11 +136,38 @@
 
       .status { margin-top: 0.5rem; font-size: 0.85rem; color: #94a3b8; }
 
+      /* Markdown specific styles */
+      .message p { margin: 0 0 0.6rem 0; }
+      .message p:last-child { margin-bottom: 0; }
+      .message code {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.9em;
+      }
+      .message pre {
+        background: rgba(0, 0, 0, 0.4);
+        padding: 1rem;
+        border-radius: 8px;
+        overflow-x: auto;
+        margin: 0.8rem 0;
+      }
+      .message pre code {
+        background: transparent;
+        padding: 0;
+      }
+      .message ul, .message ol {
+        padding-left: 1.2rem;
+        margin: 0.6rem 0;
+      }
+
       @keyframes fadeIn {
         from { opacity: 0; transform: translateY(4px); }
         to { opacity: 1; transform: translateY(0); }
       }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   </head>
   <body>
     <div class="app">
@@ -137,6 +177,7 @@
       <div class="input-area">
         <input id="message" type="text" placeholder="Type your message..." autocomplete="off" />
         <button id="sendBtn">Send</button>
+        <button id="clearBtn">Clear</button>
       </div>
       <div class="status" id="status">Ready</div>
     </div>
