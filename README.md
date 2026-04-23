@@ -10,7 +10,7 @@ A modern Full-Stack AI Chatbot application built using a simple frontend + Node.
 - Clean responsive UI
 - REST API built with Node.js and Express
 - Secure API key handling on server-side
-- Conversation history maintained during session
+- Conversation history maintained during session.
 
 ---
 
